@@ -387,15 +387,14 @@
 //     };
 
 // export default EmployeeList;
-
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { getEmployees, deleteEmployee } from "../services/employeeService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link} from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css"; 
 import menuIcon from "../../src/assets/menu.png"; 
+import ErrorPage from "./Error-page";
 
 const EmployeeList = () => {
   const navigate = useNavigate();
@@ -403,9 +402,11 @@ const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rowData, setRowData] = useState([]);
-  // const [colDefs, setColDefs] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const menuRef = useRef(null); 
+  const pagination = true;
+  const paginationPageSize = 25;
+  const paginationPageSizeSelector = [25, 50, 100];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -423,42 +424,53 @@ const EmployeeList = () => {
     fetchData();
   }, []);
 
-  // const handleDelete = (id) => {
-  //   if (deleteEmployee(id)) {
-  //     setEmployees(employees.filter((emp) => emp.id !== id));
-  //     alert(`Employee with ID ${id} has been deleted.`);
-  //   } else {
-  //     alert("Failed to delete employee.");
-  //   }
-  // };
-
   const handleUpdate = (id) => {
     alert(`Update Employee with ID: ${id}`);
-    setSelectedRow(null); // Close the options menu
+    
+    setSelectedRow(null); 
   };
+
+
 
   const handleDelete = (id) => {
-    alert(`Delete Employee with ID: ${id}`);
-    setSelectedRow(null); // Close the options menu
-  };
+    alert(`Update Employee with ID: ${id}`);
+    
+  if (deleteEmployee(id)) {
+      setEmployees(employees.filter(emp => emp.id !== id));
+      alert(`Employee with ID ${id} has been deleted.`);
+      setSelectedRow(null); // Close the options menu
+  } else {
+      alert("Failed to delete employee.");
+  }
+};
 
-  const handleEmployeeClick = (id) => {
-    navigate(`/details/${id}`);
-  };
-
+const handleAddNewEmployee = () => {
+  navigate("/add");
+}
   const handleActionCell = (params, event) => {
     if (!event) {
       console.error("Event is undefined");
       return;
     }
-  
+
     // Set the currently selected row's ID and position
     setSelectedRow({
       id: params.data.Id,
       position: event.target.getBoundingClientRect(), // Get the clicked cell's position
     });
   };
-  
+
+  const NameCellRenderer = (params) => {
+    return (
+      <Link
+        to={`/details/${params.data.Id}`} // Navigate to details page with ID
+        className="text-blue-500  hover:text-blue-700 "
+      >
+        {params.data.Name}
+      </Link>
+    );
+  };
+
   // Define custom cell renderer for actions
   const ActionCellRenderer = (params) => {
     return (
@@ -474,11 +486,14 @@ const EmployeeList = () => {
       </div>
     );
   };
-  
 
   const [colDefs] = useState([
     { field: "Id", flex: 1 },
-    { field: "Name", flex: 1 },
+    {
+      field: "Name",
+      flex: 1,
+      cellRenderer: NameCellRenderer, // Use custom renderer for Name
+    },
     { field: "Department", flex: 1 },
     { field: "Position", flex: 1 },
     {
@@ -487,9 +502,8 @@ const EmployeeList = () => {
       cellRenderer: ActionCellRenderer,
     },
   ]);
-  
- 
-  //Set row data
+
+  // Set row data
   useEffect(() => {
     if (employees.length > 0) {
       const resultantTableRow = employees.map((employee) => ({
@@ -503,24 +517,49 @@ const EmployeeList = () => {
     }
   }, [employees]);
 
+  // Close the menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setSelectedRow(null); // Close the menu
+      }
+    };
 
+    // Attach event listener to the document
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup the event listener
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <ErrorPage />
 
   return (
-    <div>
-        <p className="text-2xl font-bold m-4">Employee List</p>
-        <div className="ag-theme-quartz" style={{ height: 500 }}>
-          <AgGridReact
-            rowData={rowData}
-            columnDefs={colDefs}
-            pagination={true}
-            paginationPageSize={25}
-            suppressCellSelection={true} // Disables the border highlight on cell selection
-          />
-        </div>
-        {selectedRow && (
+    <div className="px-4 py-2">
+      <div className="flex justify-between items-center  py-2">
+        <p className="text-2xl font-bold ">Employee List</p>
+        <button className="py-2 px-4 bg-[#6264A7] text-white rounded-md" 
+          onClick={ handleAddNewEmployee }
+        >Add New Employee</button>
+
+      </div>
+      <div className="ag-theme-quartz" style={{ height: 500 }}>
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={colDefs}
+          pagination={pagination}
+          paginationPageSize={paginationPageSize}
+          paginationPageSizeSelector={paginationPageSizeSelector}
+          suppressCellSelection={true} // Disables the border highlight on cell selection
+        />
+      </div>
+      {selectedRow && (
         <div
+          ref={menuRef} // Attach the ref to the menu div
           className="absolute bg-white border shadow-lg p-2"
           style={{
             top: selectedRow.position.top + window.scrollY,
