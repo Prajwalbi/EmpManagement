@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { addEmployee ,getEmployees} from '../services/employeeService';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addNewEmployee } from '../slices/employeeSlice';
 
 
 const EmployeeAdd = () => {
@@ -13,11 +15,11 @@ const EmployeeAdd = () => {
     const [email,setEmail] = useState("");
     const [contact,setContact] = useState("");
     const [salary,setSalary] = useState("");
-
+    const dispatch = useDispatch();
 
     const handleAddEmployee = (e) => {
         e.preventDefault();
-        const obj1 = {
+        const empData = {
             name: `${fn} ${ln}`,
             position: position,
             department: department,
@@ -25,10 +27,9 @@ const EmployeeAdd = () => {
             contact: contact,
             salary: salary
         };
-        const obj2 = addEmployee(obj1);
-        setEmployees(getEmployees()); 
-
-        console.log(obj2); 
+        const newEmp = addEmployee(empData);
+        const NewEmpId = dispatch(addNewEmployee(newEmp));
+        console.log("Dispatched payload ",NewEmpId); 
         setFn("");
         setLn("");
         setPosition("");
@@ -37,6 +38,7 @@ const EmployeeAdd = () => {
         setContact("");
         setSalary("");       
     }
+
     const goBack = () => {
         navigate(-1);
     }
@@ -44,7 +46,7 @@ const EmployeeAdd = () => {
     const saveNewEmployee = () => {
     }
     return(
-        <div className='px-3 py-6 bg-gray-200'>
+        <div className='px-3 py-6 bg-gray-200 h-screen'>
             <p className='font-bold text-xl text-gray-400 mt-4 mb-3'>Add New Employee</p>
             <form onSubmit={handleAddEmployee}>
             <div className='max-w-xl'>

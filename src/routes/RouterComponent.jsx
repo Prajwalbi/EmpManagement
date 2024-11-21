@@ -1,3 +1,4 @@
+import Dashboard from "@/components/Dashboard";
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -13,28 +14,32 @@ const RouterComponent = () => {
     const router = createBrowserRouter([
         {
           path: "/",
-          element: <EmployeeList />,
+          element: <Dashboard />,
           errorElement: <ErrorPage />, 
-        },
-        {
-          path: "/add",
-          element: <EmployeeAdd />,
-        },
-        {
-          path: "/delete",
-          element: <EmployeeDelete />,
-        },
-        {
-          path: "/update/:id",
-          element: <EmployeeUpdate />,
-        },
-        {
-          path: "/details/:id",
-          element: <EmployeeDetails/>,
-        },
-        {
-            path: "*",
-            element: <ErrorPage />, // Catch-all route
+          children: [     
+            {
+                // path: "",
+                index: true,
+                element: <EmployeeList />,
+                // loader: contactLoader,
+            },
+            {
+                path: "add",
+                element: <EmployeeAdd />, 
+            },
+            {
+                path: "delete",
+                element: <EmployeeDelete />, 
+            },
+            {
+                path: "update/:id",
+                element: <EmployeeUpdate />, 
+            },
+            {
+                path: "details/:id",
+                element: <EmployeeDetails />, 
+            },
+        ],
         },
       ]);
       return (
@@ -42,6 +47,7 @@ const RouterComponent = () => {
             <RouterProvider router={router} />
         </Suspense>
     );
-}
 
-export default RouterComponent;
+  }
+
+  export default RouterComponent;

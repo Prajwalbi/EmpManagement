@@ -54,31 +54,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getEmployees } from '../services/employeeService';
+import { useSelector } from 'react-redux';
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const employeeid = parseInt(id);
-  const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
   console.log(employeeid)
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getEmployees();
-        if (data) {
-          setEmployees(data.employees);
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+
+  const {employees, loading , error} = useSelector((state) => state.employees);
 
   const employee = employees.find((emp) => emp.id == id);
   console.log(employee)
