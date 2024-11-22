@@ -67,12 +67,66 @@ export const addEmployee = (employee) => {
     return newEmployee;
 };
 
+// export const addEmployee = async (employee) => {
+//     const addEmployeeApiUrl = "https://your-backend-api/employees"; // Replace with your actual API URL
+
+//     try {
+//         // Send a POST request to the backend with the employee data
+//         const response = await fetch(addEmployeeApiUrl, {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify(employee), // Send the employee data
+//         });
+
+//         // Check if the response is successful
+//         if (!response.ok) {
+//             throw new Error("Failed to add employee");
+//         }
+
+//         // Parse and return the response from the backend
+//         const data = await response.json();
+//         console.log("Employee added successfully:", data);
+//         return data; // Assuming the backend returns the employee object with the generated ID
+//     } catch (error) {
+//         console.error("Error adding employee:", error);
+//         throw error; // Propagate the error to the caller
+//     }
+// };
+
+
 export const updateEmployee = (id, updatedEmployee) => {
     console.log("updatedEmployee from service ");
 
 
     return updatedEmployee;
 };
+// export const updateEmployee = async (id, updatedEmployee) => {
+//     try {
+//         const response = await fetch(`/api/employees/${id}`, {
+//             method: "PUT",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify(updatedEmployee),
+//         });
+
+//         if (!response.ok) {
+//             // Extract detailed error information if available
+//             const errorDetails = await response.json().catch(() => null);
+//             throw new Error(
+//                 errorDetails?.message || `Failed to update employee with ID: ${id}`
+//             );
+//         }
+
+//         return await response.json(); // Updated employee object
+//     } catch (error) {
+//         console.error("Error updating employee:", error);
+//         throw error; // Rethrow to handle in calling code
+//     }
+// };
+
 
 
 // Simulated delete service
@@ -86,38 +140,33 @@ export const deleteEmployee = async (id) => {
   };
   
 
-//   import { createAsyncThunk } from '@reduxjs/toolkit';
+
 
 //   export const deleteEmployeeAsync = createAsyncThunk(
-//     'employees/deleteEmployee',
-//     async (id, { dispatch }) => {
-//       try {
-//         // Replace with actual API call
-//         await fakeApiCall(/api/employees/${id}, { method: 'DELETE' });
-//         dispatch(deleteEmployee(id));
-//       } catch (error) {
-//         console.error('Error deleting employee:', error);
+//       'employees/deleteEmployee',
+//       async (id, { rejectWithValue }) => {
+//           try {
+//               const response = await fetch(`/api/employees/${id}`, {
+//                   method: 'DELETE',
+//               });
+  
+//               if (!response.ok) {
+//                   const errorDetails = await response.json().catch(() => null);
+//                   throw new Error(
+//                       errorDetails?.message || `Failed to delete employee with ID: ${id}`
+//                   );
+//               }
+  
+//               // Return the ID so the reducer knows which employee to remove
+//               return id;
+//           } catch (error) {
+//               console.error('Error deleting employee:', error);
+//               return rejectWithValue(error.message);
+//           }
 //       }
-//     }
 //   );
+  
 
-// export const updateEmployee = async (id, updatedEmployee) => {
-//     try {
-//         const response = await fetch(`/api/employees/${id}`, {
-//             method: "PUT",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(updatedEmployee),
-//         });
-//         if (!response.ok) {
-//             throw new Error("Failed to update employee");
-//         }
-//         return await response.json(); // Ensure this returns the updated employee object
-//     } catch (error) {
-//         console.error("Error updating employee:", error);
-//         throw error;
-//     }
-// };
+
 
 

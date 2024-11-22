@@ -46,19 +46,22 @@ const EmployeeUpdate = () => {
     //     }
     // };
 
-    const handleUpdate = (e) => {
+
+
+    const handleUpdate = async (e) => {
         e.preventDefault();
         console.log("Updated employee details to dispatch: ", employeeData);
-        dispatch(updateEmployeeDetails({ id: parseInt(id), employee: employeeData }))
-            .unwrap()
-            .then(() => {
-                alert(`Employee with ID ${id} updated successfully!`);
-                navigate(`/details/${id}`);
-            })
-            .catch((error) => {
-                alert("Failed to update employee: " + error);
-            });
+    
+        try {
+            await dispatch(updateEmployeeDetails({ id: Number(id), employee: employeeData })).unwrap();
+            alert(`Employee with ID ${id} updated successfully!`);
+            navigate(`/details/${id}`);
+        } catch (error) {
+            console.error("Failed to update employee:", error);
+            alert("Failed to update employee: " + error.message || error);
+        }
     };
+    
 
     return (
         <div>

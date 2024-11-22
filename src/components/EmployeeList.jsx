@@ -9,19 +9,22 @@ import menuIcon from "../../src/assets/menu.png";
 import ErrorPage from "./Error-page";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees, removeEmployee } from "../slices/employeeSlice";
+import { Search } from "lucide-react";
+import ConfirmDialog from "./ConfirmDialog";
 
 const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {employees, loading , error} = useSelector((state) => state.employees);
-
-
   const [rowData, setRowData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const menuRef = useRef(null); 
   const pagination = true;
   const paginationPageSize = 25;
   const paginationPageSizeSelector = [25, 50, 100];
+  const [searchInput, setSearchInput] = useState("");
+  const [isDeleteDialogOpen, setIsDeleteDailogOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
 
   useEffect(() => {
     dispatch(fetchEmployees());
@@ -34,14 +37,29 @@ const EmployeeList = () => {
 
 
 
- const handleDelete = (id) => {
+//  const handleDelete = (id) => {
   
-  // dispatch(removeEmployee(id));
-  if (window.confirm('Are you sure you want to delete this employee?')) {
-    dispatch(removeEmployee(id)); // Dispatch the thunk for deletion
-  }
-  setSelectedRow(null);
- }
+  
+//   if (window.confirm('Are you sure you want to delete this employee?')) {
+//     dispatch(removeEmployee(id)); 
+//   }
+//   setSelectedRow(null);
+//  }
+const handleDelete = (id) => {
+  setEmployeeToDelete(id);
+  setIsDeleteDailogOpen(true);
+}
+
+const confirmDelete = () => {
+    // dispatch(removeEmployee(id)); 
+    dispatch(removeEmployee(employeeToDelete));
+    setIsDeleteDailogOpen(false);
+    setEmployeeToDelete(null);
+}
+const cancelDelete = () => {
+  setIsDeleteDailogOpen(false);
+  setEmployeeToDelete(null);
+};
 
 const handleAddNewEmployee = () => {
   navigate("/add");
@@ -102,6 +120,8 @@ const handleAddNewEmployee = () => {
     },
   ]);
 
+ 
+
   // Set row data
   useEffect(() => {
     if (employees.length > 0) {
@@ -142,14 +162,28 @@ const handleAddNewEmployee = () => {
       <div className="flex justify-between items-center  py-2">
         <p className="text-2xl font-bold ">Employee List</p>
         <button className="py-2 px-4 bg-[#6264A7] text-white rounded-md" 
+        // <button className="py-2 px-4 bg-purple-500 text-white rounded-md" 
           onClick={ handleAddNewEmployee }
-        >Add New Employee</button>
+        >+ Add New Employee</button>
 
       </div>
-      <div className="ag-theme-quartz" style={{ height: 500 }}>
+      <div className="ag-theme-quartz my-7" style={{ height: 500 }}>
+
+        <div className="p-2 rounded-lg border
+         shadow-sm flex gap-2 mb-4 max-w-sm">
+            <Search  />
+            <input 
+            type="text" 
+            placeholder="Search on Anything..." 
+            className="outline-none w-full"
+            value={searchInput}
+            onChange={(e)=>setSearchInput(e.target.value)}
+            />
+        </div>
         <AgGridReact
           rowData={rowData}
           columnDefs={colDefs}
+          quickFilterText={searchInput}
           pagination={pagination}
           paginationPageSize={paginationPageSize}
           paginationPageSizeSelector={paginationPageSizeSelector}
@@ -179,6 +213,13 @@ const handleAddNewEmployee = () => {
           </button>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        title="Delete Employee"
+        message="Are you sure you want to delete this employee? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
     </div>
   );
 };

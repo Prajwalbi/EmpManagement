@@ -17,27 +17,61 @@ const EmployeeAdd = () => {
     const [salary,setSalary] = useState("");
     const dispatch = useDispatch();
 
-    const handleAddEmployee = (e) => {
+    // const handleAddEmployee = (e) => {
+    //     e.preventDefault();
+    //     const empData = {
+    //         name: `${fn} ${ln}`,
+    //         position: position,
+    //         department: department,
+    //         email: email,
+    //         contact: contact,
+    //         salary: salary
+    //     };
+    //     const newEmp = addEmployee(empData);
+    //     const NewEmpId = dispatch(addNewEmployee(newEmp));
+    //     console.log("Dispatched payload ",NewEmpId); 
+    //     setFn("");
+    //     setLn("");
+    //     setPosition("");
+    //     setDepartment("");   
+    //     setEmail("");
+    //     setContact("");
+    //     setSalary("");       
+    // }
+
+    const handleAddEmployee = async (e) => {
         e.preventDefault();
+    
+        // Construct employee data
         const empData = {
             name: `${fn} ${ln}`,
-            position: position,
-            department: department,
-            email: email,
-            contact: contact,
-            salary: salary
+            position,
+            department,
+            email,
+            contact,
+            salary,
         };
-        const newEmp = addEmployee(empData);
-        const NewEmpId = dispatch(addNewEmployee(newEmp));
-        console.log("Dispatched payload ",NewEmpId); 
-        setFn("");
-        setLn("");
-        setPosition("");
-        setDepartment("");   
-        setEmail("");
-        setContact("");
-        setSalary("");       
-    }
+    
+        try {
+            const newEmployee = await dispatch(addNewEmployee(empData)).unwrap();
+            
+            console.log("Dispatched payload:", newEmployee);
+    
+            setFn("");
+            setLn("");
+            setPosition("");
+            setDepartment("");
+            setEmail("");
+            setContact("");
+            setSalary("");
+    
+            alert(`Employee "${newEmployee.name}" added successfully with ID ${newEmployee.id}!`);
+        } catch (error) {
+            console.error("Error adding employee:", error);
+            alert("Failed to add employee: " + error.message || error);
+        }
+    };
+    
 
     const goBack = () => {
         navigate(-1);
