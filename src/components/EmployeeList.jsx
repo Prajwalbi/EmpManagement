@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees, removeEmployee } from "../slices/employeeSlice";
 import { Search } from "lucide-react";
 import ConfirmDialog from "./ConfirmDialog";
+import { ClimbingBoxLoader } from "react-spinners";
 
 const EmployeeList = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const EmployeeList = () => {
   }, [dispatch]);
 
   const handleUpdate = (id) => {
-    navigate(`/update/${id}`);
+    navigate(`/employees/update/${id}`);
     setSelectedRow(null); 
   };
 
@@ -62,7 +63,7 @@ const cancelDelete = () => {
 };
 
 const handleAddNewEmployee = () => {
-  navigate("/add");
+  navigate("/employees/add");
 }
   const handleActionCell = (params, event) => {
     if (!event) {
@@ -80,7 +81,7 @@ const handleAddNewEmployee = () => {
   const NameCellRenderer = (params) => {
     return (
       <Link
-        to={`/details/${params.data.Id}`} // Navigate to details page with ID
+        to={`/employees/details/${params.data.Id}`} // Navigate to details page with ID
         className="text-blue-500  hover:text-blue-700 "
       >
         {params.data.Name}
@@ -154,7 +155,13 @@ const handleAddNewEmployee = () => {
   }, []);
 
   
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (<div className="flex items-center justify-center h-screen">
+  <ClimbingBoxLoader
+      color= "#f97316"
+      loading
+      size={17}
+  /> 
+</div>);
   if (error) return <ErrorPage />
 
   return (

@@ -55,7 +55,7 @@ const EmployeeUpdate = () => {
         try {
             await dispatch(updateEmployeeDetails({ id: Number(id), employee: employeeData })).unwrap();
             alert(`Employee with ID ${id} updated successfully!`);
-            navigate(`/details/${id}`);
+            navigate(`/employees/details/${id}`);
         } catch (error) {
             console.error("Failed to update employee:", error);
             alert("Failed to update employee: " + error.message || error);
@@ -68,13 +68,13 @@ const EmployeeUpdate = () => {
             
             {message && <p>{message}</p>}
             {employeeData.id && (
-            <div className='px-3 py-6 bg-gray-200'>
-            <p className='font-bold text-xl text-gray-400 mt-4 mb-3'>Update Employee Details</p>
+            <div className='px-3 ml-2 py-6'>
+            <p className='font-bold text-xl text-[#6264A7] mt-4 mb-4'>Update Employee Details</p>
             <form onSubmit={handleUpdate}>
             <div className='max-w-xl'>
                 <div className='flex justify-between'>
                     <div className='flex flex-col gap-2 group'>
-                        <label htmlFor="fn" className='font-semibold text-gray-400 text-md group-focus-within:text-[#2196F3]'>Name</label>
+                        <label htmlFor="fn" className='font-semibold text-md group-focus-within:text-[#2196F3]'>Name</label>
                         <input
                             type="text"
                             name="Name"
@@ -82,11 +82,11 @@ const EmployeeUpdate = () => {
                             onChange={(e) => setEmployeeData({ ...employeeData, name: e.target.value })} 
                             placeholder="Name" 
                             required
-                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
+                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
                         /> 
                     </div>
                     {/* <div className='flex flex-col gap-2 group'>
-                        <label htmlFor="ln" className='font-semibold text-gray-400 text-md group-focus-within:text-[#2196F3]'>Last Name</label> 
+                        <label htmlFor="ln" className='font-semibold text-md group-focus-within:text-[#2196F3]'>Last Name</label> 
                         <input
                             type="text"
                             name="name"
@@ -99,7 +99,7 @@ const EmployeeUpdate = () => {
                     </div> */}
                 </div>
                 <div className='group'>
-                    <div  className='font-semibold text-gray-400 text-md mt-4 mb-2 group-focus-within:text-[#2196F3]'>Job Position</div> 
+                    <div  className='font-semibold text-md mt-4 mb-2 group-focus-within:text-[#2196F3]'>Job Position</div> 
                     <input
                         type="text"
                         name="position"
@@ -107,12 +107,12 @@ const EmployeeUpdate = () => {
                         onChange={(e) => setEmployeeData({ ...employeeData, position: e.target.value })} 
                         placeholder="Position"
                         required
-                        className=' w-full focus:outline-none  border-gray-300 focus:border-[#2196F3] text-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
+                        className=' w-full focus:outline-none  border-gray-300 focus:border-[#2196F3]  text-sm  px-2 py-3 rounded-sm  border-2'
                     />
                 </div>
                 <div className='flex justify-between mt-6'>
                     <div className='flex flex-col gap-2 group'>
-                        <label htmlFor="fn" className='font-semibold text-gray-400 text-md group-focus-within:text-[#2196F3]'>Email Address</label>
+                        <label htmlFor="fn" className='font-semibold text-md group-focus-within:text-[#2196F3]'>Email Address</label>
                         <input
                             type="email"
                             name="email"
@@ -120,11 +120,11 @@ const EmployeeUpdate = () => {
                             onChange={(e) => setEmployeeData({...employeeData,email: e.target.value})}
                             placeholder="Email"
                             required
-                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
+                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
                         /> 
                     </div>
                     <div className='flex flex-col gap-2 group'>
-                        <label htmlFor="ln" className='font-semibold text-gray-400 text-md group-focus-within:text-[#2196F3]'>Department</label> 
+                        <label htmlFor="ln" className='font-semibold text-md group-focus-within:text-[#2196F3]'>Department</label> 
                         <input
                             type="text"
                             name="department"
@@ -132,13 +132,13 @@ const EmployeeUpdate = () => {
                             onChange={(e) => setEmployeeData({ ...employeeData, department: e.target.value })} 
                             placeholder="Department"
                             required
-                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
+                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3]  text-sm  px-2 py-3 rounded-sm  border-2'
                         />
                     </div>
                 </div>
                 <div className='flex justify-between mt-6'>
                     <div className='flex flex-col gap-2 group'>
-                        <label htmlFor="fn" className='font-semibold text-gray-400 text-md group-focus-within:text-[#2196F3]'>Mobile Number</label>
+                        <label htmlFor="fn" className='font-semibold text-md group-focus-within:text-[#2196F3]'>Mobile Number</label>
                         <input
                             type="text"
                             name="contact"
@@ -146,11 +146,11 @@ const EmployeeUpdate = () => {
                             onChange={(e) => setEmployeeData({...employeeData,contact: e.target.value})}
                             placeholder="Contact"
                             required
-                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
+                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3]  text-sm  px-2 py-3 rounded-sm  border-2'
                         /> 
                     </div>
                     <div className='flex flex-col gap-2 group'>
-                        <label htmlFor="ln" className='font-semibold text-gray-400 text-md group-focus-within:text-[#2196F3]'>Salary</label> 
+                        <label htmlFor="ln" className='font-semibold text-md group-focus-within:text-[#2196F3]'>Salary</label> 
                         <input
                             type="text"
                             name="salary"
@@ -158,7 +158,7 @@ const EmployeeUpdate = () => {
                             onChange={(e) => setEmployeeData({...employeeData,salary: e.target.value})}
                             placeholder="Salary"
                             required
-                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3] text-[#2196F3] text-sm  px-2 py-3 rounded-sm  border-2'
+                            className=' w-[270px] focus:outline-none  border-gray-300 focus:border-[#2196F3]  text-sm  px-2 py-3 rounded-sm  border-2'
                         />
                     </div>
                 </div>

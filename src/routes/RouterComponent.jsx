@@ -1,7 +1,9 @@
+
 import Dashboard from "@/components/Dashboard";
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import { ClimbingBoxLoader } from "react-spinners";
+const Layout = lazy(() => import("../components/Layout"));
 const EmployeeList = lazy(() => import("../components/EmployeeList"));
 const EmployeeAdd = lazy(() => import("../components/EmployeeAdd"));
 const ErrorPage = lazy(() => import("../components/Error-page"));
@@ -14,36 +16,54 @@ const RouterComponent = () => {
     const router = createBrowserRouter([
         {
           path: "/",
-          element: <Dashboard />,
+          element: <Layout />,
           errorElement: <ErrorPage />, 
           children: [     
             {
-                // path: "",
+                path: "dashboard",
                 index: true,
-                element: <EmployeeList />,
-                // loader: contactLoader,
+                element: <Dashboard />,
+
             },
             {
-                path: "add",
-                element: <EmployeeAdd />, 
-            },
-            {
-                path: "delete",
-                element: <EmployeeDelete />, 
-            },
-            {
-                path: "update/:id",
-                element: <EmployeeUpdate />, 
-            },
-            {
-                path: "details/:id",
-                element: <EmployeeDetails />, 
-            },
+                path: "employees",
+                children: [
+                    {
+                        path: "",
+                         element: <EmployeeList />,
+
+                    },
+                    {
+                        path: "add",
+                        element: <EmployeeAdd />, 
+                    },
+                    {
+                        path: "delete",
+                        element: <EmployeeDelete />, 
+                    },
+                    {
+                        path: "update/:id",
+                        element: <EmployeeUpdate />, 
+                    },
+                    {
+                        path: "details/:id",
+                        element: <EmployeeDetails />, 
+                    },
+                ]
+            }
+           
         ],
         },
       ]);
       return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={
+        <div className="flex items-center justify-center h-screen">
+            <ClimbingBoxLoader
+                color= "#f97316"
+                loading
+                size={17}
+            /> 
+          </div>}  >
             <RouterProvider router={router} />
         </Suspense>
     );

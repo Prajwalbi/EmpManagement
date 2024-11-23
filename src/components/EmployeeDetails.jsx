@@ -81,7 +81,7 @@ const EmployeeDetails = () => {
   }
 
   const handleUpdate = () => {
-    navigate(`/update/${id}`);
+    navigate(`/employees/update/${id}`);
   };
 
   return (

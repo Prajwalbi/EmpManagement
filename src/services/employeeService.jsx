@@ -19,7 +19,8 @@ export let idCounter = employees.length > 0 ? Math.max(...employees.map(emp => e
 
 export const getEmployees = async () => {
     // Fetch employee data from API
-    const getApiUrl = "https://mocki.io/v1/a2d8dbbe-d0ad-443e-b314-b1dfe2f5cb61";
+    // const getApiUrl = "https://mocki.io/v1/a2d8dbbe-d0ad-443e-b314-b1dfe2f5cb61";
+    const getApiUrl = "https://mocki.io/v1/be3f5efa-c9c0-433c-838a-41f98627f068";
 
     try{
         const response = await fetch(getApiUrl);
@@ -31,8 +32,8 @@ export const getEmployees = async () => {
 
          // Parse the response JSON
          const employees = await response.json();
-
-         return employees;
+        console.log("Response from json ", employees);
+         return {employees};
 
     }
     catch(error){
